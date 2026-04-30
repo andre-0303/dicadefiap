@@ -66,9 +66,6 @@ Schema em `migrations/001_init.sql`. Tabelas: `posts`, `categorias`, `admin_sess
 
 Categorias padrão: Rotina de Estudos, Challenges, Notas & Avaliações, GitHub Education, Livros & Links, Ferramentas.
 
-## Painel Admin
-
-Acesse `/admin` e insira a senha definida em `VITE_ADMIN_PASSWORD`. Sessão válida por 7 dias via `localStorage`.
 
 ## Status do Projeto
 
