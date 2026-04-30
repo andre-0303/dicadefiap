@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import PostCard from '../components/PostCard'
-import { getPosts, getCategories } from '../lib/db'
-import type { Post, Category } from '../types'
+import { getPosts } from '../lib/db'
+import type { Post } from '../types'
 
 export default function Home() {
   const { slug: categorySlug } = useParams<{ slug?: string }>()
   const [posts, setPosts] = useState<Post[]>([])
-  const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -16,75 +15,46 @@ export default function Home() {
     setLoading(true)
     setError(null)
 
-    Promise.all([getPosts(categorySlug), getCategories()])
-      .then(([p, c]) => {
-        setPosts(p)
-        setCategories(c)
-      })
+    getPosts(categorySlug)
+      .then(setPosts)
       .catch(err => {
         console.error(err)
-        setError('Erro ao carregar posts. Tente novamente.')
+        setError('Erro ao carregar posts.')
       })
       .finally(() => setLoading(false))
   }, [categorySlug])
 
-  const currentCategory = categorySlug
-    ? categories.find(c => c.slug === categorySlug)
-    : null
-
   return (
     <div className="min-h-screen bg-black">
-      <div className="max-w-2xl mx-auto">
-        <Header categories={categories} />
+      <div className="max-w-2xl mx-auto px-4">
+        <Header />
 
-        <main className="px-6 pb-20">
-          {currentCategory && (
-            <div className="mb-4 flex items-center gap-2 text-xs text-[#525252]">
-              <span>filtrando por</span>
-              <span
-                className="px-2 py-0.5 rounded border"
-                style={{ color: currentCategory.cor, borderColor: currentCategory.cor + '44' }}
-              >
-                {currentCategory.nome}
-              </span>
-            </div>
-          )}
-
+        <main className="pb-20">
           {loading && (
-            <div className="py-12 text-center text-xs text-[#333]">
+            <p className="text-center text-xs text-[#333] py-12 font-mono">
               carregando<span className="animate-pulse">...</span>
-            </div>
+            </p>
           )}
 
           {error && (
-            <div className="py-12 text-center text-xs text-red-500/70">
+            <p className="text-center text-xs text-red-500/60 py-12 font-mono">
               {error}
-            </div>
+            </p>
           )}
 
           {!loading && !error && posts.length === 0 && (
-            <div className="py-12 text-center">
-              <p className="text-xs text-[#333]">nenhum post encontrado.</p>
-              {categorySlug && (
-                <p className="mt-1 text-xs text-[#333]">
-                  tente outra categoria ou{' '}
-                  <a href="/" className="text-accent hover:underline">veja todos</a>.
-                </p>
-              )}
-            </div>
+            <p className="text-center text-xs text-[#333] py-12 font-mono">
+              nenhum post publicado ainda.
+            </p>
           )}
 
-          {!loading && !error && posts.length > 0 && (
-            <div className="border border-[#111] rounded">
-              {posts.map(post => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
-          )}
+          {!loading && !error && posts.map(post => (
+            <PostCard key={post.id} post={post} />
+          ))}
         </main>
 
-        <footer className="px-6 py-6 border-t border-[#111] text-center text-[10px] text-[#2a2a2a]">
-          © {new Date().getFullYear()} dica da fiap — feito por estudantes, pra estudantes
+        <footer className="py-8 text-center text-[10px] text-[#222] font-mono">
+          © {new Date().getFullYear()} dica da fiap
         </footer>
       </div>
     </div>

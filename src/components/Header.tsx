@@ -1,70 +1,39 @@
-import { Link, useLocation } from "react-router-dom";
-import type { Category } from "../types";
+import { Link } from "react-router-dom";
 
-type Props = {
-  categories?: Category[];
-};
-
-export default function Header({ categories = [] }: Props) {
-  const location = useLocation();
-  const currentSlug = location.pathname.startsWith("/categoria/")
-    ? location.pathname.replace("/categoria/", "")
-    : null;
-
+export default function Header() {
   return (
-    <header>
-      <div className="flex items-center gap-2 px-4 py-2 mt-10 bg-[#111] border-b border-[#1e1e1e]">
-        <span className="text-[11px]">🔴</span>
-        <span className="text-[11px]">🟡</span>
-        <span className="text-[11px]">🟢</span>
-        <span className="ml-2 text-xs text-[#525252]">dica-da-fiap — bash</span>
-      </div>
+    <header className="w-full px-4 pt-6 pb-10">
+      {/* Autor */}
+      <p className="text-xs text-cyan-400 mb-10 font-mono">
+        <a
+          href="https://github.com/andre-0303"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          por: @andre-0303
+        </a>
+      </p>
 
-      <div className="px-6 pt-10 pb-6">
-        <Link to="/" className="block group">
-          <h1 className="text-2xl font-bold tracking-tight text-white group-hover:text-accent transition-colors duration-150">
+      {/* Logo pixel art centralizado */}
+      <div className="text-center mb-14">
+        <Link to="/" className="inline-block">
+          <h1
+            className="text-white leading-tight tracking-wide select-none"
+            style={{
+              fontFamily: "'Press Start 2P', monospace",
+              fontSize: "clamp(1.8rem, 6vw, 3.2rem)",
+              textShadow: [
+                "3px 3px 0 #3730a3",
+                "6px 6px 0 #312e81",
+                "9px 9px 0 #1e1b4b",
+                "12px 12px 0 #0f0e2e",
+              ].join(", "),
+            }}
+          >
             DICA DA FIAP
-            <span className="animate-pulse text-accent">_</span>
           </h1>
         </Link>
-        <p className="mt-1 text-sm text-[#525252]">
-          dicas pra sobreviver na fiap e sair com o máximo possível
-        </p>
       </div>
-
-      {/* Filtro por categoria */}
-      {categories.length > 0 && (
-        <nav className="px-6 pb-6 flex flex-wrap gap-2 text-xs">
-          <Link
-            to="/"
-            className={`px-2 py-1 border rounded transition-colors duration-150 ${
-              currentSlug === null && location.pathname === "/"
-                ? "border-accent text-accent bg-accent/10"
-                : "border-[#2a2a2a] text-[#525252] hover:border-[#444] hover:text-[#999]"
-            }`}
-          >
-            todos
-          </Link>
-          {categories.map((cat) => (
-            <Link
-              key={cat.slug}
-              to={`/categoria/${cat.slug}`}
-              className={`px-2 py-1 border rounded transition-colors duration-150 ${
-                currentSlug === cat.slug
-                  ? "border-current text-current bg-current/10"
-                  : "border-[#2a2a2a] text-[#525252] hover:border-[#444] hover:text-[#999]"
-              }`}
-              style={
-                currentSlug === cat.slug
-                  ? { color: cat.cor, borderColor: cat.cor + "88" }
-                  : {}
-              }
-            >
-              {cat.nome.toLowerCase()}
-            </Link>
-          ))}
-        </nav>
-      )}
     </header>
   );
 }
