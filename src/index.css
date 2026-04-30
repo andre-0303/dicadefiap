@@ -1,1 +1,111 @@
 @import "tailwindcss";
+
+@theme {
+  --color-accent: #a78bfa;
+  --color-accent-dim: #7c5cbf;
+  --color-surface: #0d0d0d;
+  --color-border: #1e1e1e;
+  --color-muted: #525252;
+  --color-green: #4ade80;
+  --color-orange: #fb923c;
+  --color-cyan: #38bdf8;
+  --color-yellow: #fbbf24;
+  --color-pink: #f472b6;
+
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-mono);
+  background-color: #000000;
+  color: #e5e5e5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Scrollbar estilo terminal */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a78bfa;
+}
+
+/* Seleção de texto */
+::selection {
+  background-color: #a78bfa40;
+  color: #e5e5e5;
+}
+
+/* Prose para conteúdo markdown */
+.prose {
+  line-height: 1.75;
+  color: #d4d4d4;
+}
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  color: #ffffff;
+  font-weight: 600;
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+}
+.prose h1 { font-size: 1.5rem; border-bottom: 1px solid #1e1e1e; padding-bottom: 0.5em; }
+.prose h2 { font-size: 1.25rem; }
+.prose h3 { font-size: 1rem; }
+.prose p { margin: 1em 0; }
+.prose a { color: #a78bfa; text-decoration: none; border-bottom: 1px solid #a78bfa44; }
+.prose a:hover { border-color: #a78bfa; }
+.prose code {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.875em;
+  color: #4ade80;
+}
+.prose pre {
+  background: #0d0d0d;
+  border: 1px solid #1e1e1e;
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+.prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.875rem;
+  color: #e5e5e5;
+}
+.prose ul, .prose ol {
+  padding-left: 1.5em;
+  margin: 1em 0;
+}
+.prose li { margin: 0.35em 0; }
+.prose blockquote {
+  border-left: 3px solid #a78bfa;
+  padding-left: 1em;
+  margin-left: 0;
+  color: #737373;
+}
+.prose strong { color: #ffffff; font-weight: 600; }
+.prose hr {
+  border: none;
+  border-top: 1px solid #1e1e1e;
+  margin: 2em 0;
+}

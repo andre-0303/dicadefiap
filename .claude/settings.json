@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --env-file=.env scripts/migrate.js)",
+      "Bash(npx tsc *)"
+    ]
+  }
+}
