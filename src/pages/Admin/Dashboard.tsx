@@ -95,63 +95,61 @@ export default function Dashboard() {
 
         {!loading && posts.length > 0 && (
           <div className="border border-[#1a1a1a] rounded overflow-hidden">
-            {/* Cabeçalho da tabela */}
-            <div className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-4 px-4 py-2 bg-[#0d0d0d] border-b border-[#1a1a1a] text-[10px] text-[#444] uppercase tracking-wider">
-              <span>título</span>
-              <span>categoria</span>
-              <span>data</span>
-              <span>status</span>
-              <span>ações</span>
-            </div>
-
             {posts.map(post => (
               <div
                 key={post.id}
-                className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-4 items-center px-4 py-3 border-b border-[#111] last:border-0 hover:bg-[#0a0a0a] transition-colors"
+                className="flex flex-col gap-2 px-4 py-3.5 border-b border-[#111] last:border-0 hover:bg-[#0a0a0a] transition-colors"
               >
                 {/* Título */}
-                <span className="text-sm text-white truncate">{post.titulo}</span>
+                <span className="text-sm text-white">{post.titulo}</span>
 
-                {/* Categoria */}
-                <span
-                  className="text-[10px] px-1.5 py-0.5 rounded border shrink-0"
-                  style={{
-                    color: post.categoria_cor ?? '#555',
-                    borderColor: (post.categoria_cor ?? '#555') + '44',
-                  }}
-                >
-                  {post.categoria_slug ?? '—'}
-                </span>
+                {/* Metadados abaixo do título */}
+                <div className="flex items-center gap-3 flex-wrap">
+                  {/* Categoria */}
+                  {post.categoria_slug ? (
+                    <span
+                      className="text-[10px] px-1.5 py-0.5 rounded border"
+                      style={{
+                        color: post.categoria_cor ?? '#555',
+                        borderColor: (post.categoria_cor ?? '#555') + '44',
+                      }}
+                    >
+                      {post.categoria_slug}
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-[#333]">sem categoria</span>
+                  )}
 
-                {/* Data */}
-                <span className="text-[10px] text-[#444] shrink-0">{formatDate(post.criado_em)}</span>
+                  {/* Data */}
+                  <span className="text-[10px] text-[#444]">{formatDate(post.criado_em)}</span>
 
-                {/* Status */}
-                <button
-                  onClick={() => handleToggle(post)}
-                  className={`text-[10px] px-2 py-0.5 rounded border transition-colors shrink-0 ${
-                    post.publicado
-                      ? 'text-green-400 border-green-400/30 hover:bg-green-400/10'
-                      : 'text-[#555] border-[#222] hover:text-[#888]'
-                  }`}
-                >
-                  {post.publicado ? 'público' : 'rascunho'}
-                </button>
-
-                {/* Ações */}
-                <div className="flex items-center gap-2 shrink-0">
-                  <Link
-                    to={`/admin/posts/${post.id}/edit`}
-                    className="text-[10px] text-[#555] hover:text-white transition-colors"
-                  >
-                    editar
-                  </Link>
+                  {/* Status */}
                   <button
-                    onClick={() => handleDelete(post)}
-                    className="text-[10px] text-[#555] hover:text-red-400 transition-colors"
+                    onClick={() => handleToggle(post)}
+                    className={`text-[10px] px-2 py-0.5 rounded border transition-colors ${
+                      post.publicado
+                        ? 'text-green-400 border-green-400/30 hover:bg-green-400/10'
+                        : 'text-[#555] border-[#222] hover:text-[#888]'
+                    }`}
                   >
-                    deletar
+                    {post.publicado ? 'público' : 'rascunho'}
                   </button>
+
+                  {/* Ações */}
+                  <div className="flex items-center gap-2 ml-auto">
+                    <Link
+                      to={`/admin/posts/${post.id}/edit`}
+                      className="text-[10px] text-[#555] hover:text-white transition-colors"
+                    >
+                      editar
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(post)}
+                      className="text-[10px] text-[#555] hover:text-red-400 transition-colors"
+                    >
+                      deletar
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
