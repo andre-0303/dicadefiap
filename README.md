@@ -73,7 +73,7 @@ Acesse `/admin` e insira a senha definida em `VITE_ADMIN_PASSWORD`. Sessão vál
 ## Status do Projeto
 
 - [x] Planejamento e stack definidos
-- [ ] Fase 1: Setup inicial + banco de dados
-- [ ] Fase 2: Frontend público (Home, Post, Category)
-- [ ] Fase 3: Painel admin (Login, Dashboard, Editor)
+- [x] Fase 1: Setup inicial + banco de dados
+- [x] Fase 2: Frontend público (Home, Post, Category)
+- [x] Fase 3: Painel admin (Login, Dashboard, Editor)
 - [ ] Fase 4: Deploy em VPS
