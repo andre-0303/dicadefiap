@@ -1,28 +1,19 @@
-import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import PostCard from '../components/PostCard'
-import { getPosts } from '../lib/db'
-import type { Post } from '../types'
+import { SkeletonPostList } from '../components/Skeleton'
+import { getPosts, getPostBySlug } from '../lib/db'
+import { fetchWithCache } from '../lib/cache'
+import { useQuery } from '../hooks/useQuery'
 
 export default function Home() {
   const { slug: categorySlug } = useParams<{ slug?: string }>()
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    setLoading(true)
-    setError(null)
-
-    getPosts(categorySlug)
-      .then(setPosts)
-      .catch(err => {
-        console.error(err)
-        setError('Erro ao carregar posts.')
-      })
-      .finally(() => setLoading(false))
-  }, [categorySlug])
+  const { data: posts, loading, error } = useQuery(
+    `posts:${categorySlug ?? '__all__'}`,
+    () => getPosts(categorySlug),
+    [categorySlug]
+  )
 
   return (
     <div className="min-h-screen bg-black">
@@ -30,11 +21,7 @@ export default function Home() {
         <Header />
 
         <main className="pb-20">
-          {loading && (
-            <p className="text-center text-xs text-[#333] py-12 font-mono">
-              carregando<span className="animate-pulse">...</span>
-            </p>
-          )}
+          {loading && <SkeletonPostList count={5} />}
 
           {error && (
             <p className="text-center text-xs text-red-500/60 py-12 font-mono">
@@ -42,14 +29,18 @@ export default function Home() {
             </p>
           )}
 
-          {!loading && !error && posts.length === 0 && (
+          {!loading && !error && (posts ?? []).length === 0 && (
             <p className="text-center text-xs text-[#333] py-12 font-mono">
               nenhum post publicado ainda.
             </p>
           )}
 
-          {!loading && !error && posts.map(post => (
-            <PostCard key={post.id} post={post} />
+          {!loading && !error && (posts ?? []).map(post => (
+            <PostCard
+              key={post.id}
+              post={post}
+              onPrefetch={() => fetchWithCache(`post:${post.slug}`, () => getPostBySlug(post.slug))}
+            />
           ))}
         </main>
 

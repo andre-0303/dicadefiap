@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAllPosts, deletePost, togglePublish } from '../../lib/db'
+import { invalidate } from '../../lib/cache'
 import type { Post } from '../../types'
 
 function checkAuth(): boolean {
@@ -29,12 +30,16 @@ export default function Dashboard() {
 
   async function handleToggle(post: Post) {
     await togglePublish(post.id, !post.publicado)
+    invalidate('posts:')
+    invalidate(`post:${post.slug}`)
     setPosts(prev => prev.map(p => p.id === post.id ? { ...p, publicado: !p.publicado } : p))
   }
 
   async function handleDelete(post: Post) {
     if (!confirm(`Deletar "${post.titulo}"?`)) return
     await deletePost(post.id)
+    invalidate('posts:')
+    invalidate(`post:${post.slug}`)
     setPosts(prev => prev.filter(p => p.id !== post.id))
   }
 

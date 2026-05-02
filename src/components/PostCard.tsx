@@ -3,14 +3,17 @@ import type { Post } from '../types'
 
 type Props = {
   post: Post
+  onPrefetch?: () => void
 }
 
-export default function PostCard({ post }: Props) {
+export default function PostCard({ post, onPrefetch }: Props) {
   const num = String(post.numero).padStart(2, '0')
 
   return (
     <Link
       to={`/post/${post.slug}`}
+      onMouseEnter={onPrefetch}
+      onFocus={onPrefetch}
       className="flex items-center gap-4 px-5 py-4 mb-3 border border-[#1a1a1a] rounded hover:border-[#333] transition-colors duration-100 group"
     >
       {/* Bolinhas estilo macOS */}

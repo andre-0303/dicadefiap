@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import PostForm from './PostForm'
 import { getAllPosts, updatePost, deletePost } from '../../lib/db'
+import { invalidate } from '../../lib/cache'
 import type { Post, PostInput } from '../../types'
 
 function checkAuth(): boolean {
@@ -49,8 +50,14 @@ export default function EditPost() {
         categoria_id: post.categoria_id,
         publicado: post.publicado,
       }}
-      onSave={(data: PostInput) => updatePost(post.id, data).then(() => {})}
-      onDelete={() => deletePost(post.id)}
+      onSave={(data: PostInput) => updatePost(post.id, data).then(() => {
+        invalidate('posts:')
+        invalidate(`post:${post.slug}`)
+      })}
+      onDelete={() => deletePost(post.id).then(() => {
+        invalidate('posts:')
+        invalidate(`post:${post.slug}`)
+      })}
     />
   )
 }

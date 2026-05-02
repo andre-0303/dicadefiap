@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PostForm from './PostForm'
 import { createPost } from '../../lib/db'
+import { invalidate } from '../../lib/cache'
 import type { PostInput } from '../../types'
 
 function checkAuth(): boolean {
@@ -20,7 +21,7 @@ export default function NewPost() {
   return (
     <PostForm
       title="novo post"
-      onSave={(data: PostInput) => createPost(data).then(() => {})}
+      onSave={(data: PostInput) => createPost(data).then(() => { invalidate('posts:') })}
     />
   )
 }
